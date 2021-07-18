@@ -1,4 +1,4 @@
-A Simple Student Information Management System developed using SpringBoot.
+A Simple Student Information Management System developed using SpringBoot.</br>
 FrontEnd is HTML AJAX
 Backend is SpringBoot
 The Folder SIS is a complete project including all dependencies in pom.xml
