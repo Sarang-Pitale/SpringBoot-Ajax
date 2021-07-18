@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<body>
+<fieldset><legend>Get Student Data:</legend>
+
+<button type="button" onclick="loadDoc()">Click to getAll Data</button>
+<div id="demo">
+<h2></h2>
+</div>
+</fieldset>
+<fieldset><legend>Add Student:</legend>
+
+<form name="frm1" action="" method="post" >
+<input type="text" id="rno" name="rno">
+<input type="text" id="name" name="name">
+<input type="text" id="sem" name="sem">
+<input type="text" id="gender" name="gender">
+<input id="submit" type="button" name="submit" value="submit">
+</form>
+</fieldset>
+<fieldset><legend>Search Student:</legend>
+<form name="frm2" action="" method="get" >
+
+Roll Number:<input type="text" id="search" name="search"> <input id="submit1" type="button" name="submit1" value="submit">
+</form>
+<div id="demo1">
+<h2></h2>
+</div>
+</fieldset>
+<fieldset><legend>Update Student:</legend>
+<form name="frm3"  >
+Enter Roll No to update <input type="text" id="urno" name="urno"><br/>
+Enter Data to update
+<input type="text" id="rno1" name="rno1">
+<input type="text" id="name1" name="name1">
+<input type="text" id="sem1" name="sem1">
+<input type="text" id="gender1" name="gender1">
+<input id="submit2" type="button" name="submit2" value="submit">
+</form></fieldset>
+<fieldset><legend>Delete Student:</legend>
+<form name="frm3"  >
+
+Roll Number:<input type="text" id="delete" name="delete"> <input id="submit3" type="button" name="submit3" value="submit">
+</form></fieldset>
+<script>
+function loadDoc() {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function() {console.log(this.responseText);
+	  const myObj = JSON.parse(this.responseText);
+	  let text = "<table border='1'>"
+	  for (let x in myObj) {
+	    text += "<tr><td>" + myObj[x].rno +"</td><td>"+ myObj[x].name +"</td><td>"+ myObj[x].sem +"</td><td>"+ myObj[x].gender + "</td></tr>";
+	  }
+	  text += "</table>"  
+    document.getElementById("demo").innerHTML = text;
+  }
+  xhttp.open("GET", "http://localhost:8080/students");
+  xhttp.send();
+}
+
+
+
+</script>
+
+
+<script>
+    $(document).ready(function(){
+        // click on button submit
+        $("#submit").on('click', function(){
+        	
+        	 var search = {}
+        	    search["rno"] = $("#rno").val();
+        	    search["name"] = $("#name").val();
+        	    search["sem"] = $("#sem").val();
+        	    search["gender"] = $("#gender").val();
+
+            // send ajax
+            $.ajax({
+                url: 'http://localhost:8080/students', // url where to submit the request
+                contentType: "application/json",
+                type : "POST", // type of action POST || GET
+                dataType : 'json', // data type
+                data: JSON.stringify(search),
+                 success : function(result) {
+                    // you can see the result from the console
+                    // tab of the developer tools
+                	 
+                },
+                error: function(xhr, resp, text) {
+                	
+                    console.log(xhr, resp, text);
+                }
+                
+            })
+            loadDoc() ;
+        });
+        
+    });
+
+</script>
+<script>
+    $(document).ready(function(){
+        $("#submit1").on('click', function(){
+              	 var search1 = {}
+        	    search1["rno"] = $("#search").val();
+        	    	 $.ajax({
+        		    url: "http://localhost:8080/students/"+ search1["rno"],
+        		    type: 'GET',        		    
+        		    success: function(res) {console.log(res);
+        		    	 const myObj = (res);
+        		   	  let text = "<table border='1'>"
+        		   	  text += "<tr><td>" + myObj["rno"] +"</td><td>"+ myObj["name"] +"</td><td>"+ myObj["sem"] +"</td><td>"+ myObj["gender"] + "</td></tr>";
+         		   	  text += "</table>"  
+        		       document.getElementById("demo1").innerHTML = text;
+        		    }
+        		});
+          });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        // click on button submit
+        $("#submit2").on('click', function(){
+        	
+        	 var search = {}
+        	    search["rno"] = $("#rno1").val();
+        	    search["name"] = $("#name1").val();
+        	    search["sem"] = $("#sem1").val();
+        	    search["gender"] = $("#gender1").val();
+
+            // send ajax
+            $.ajax({
+                url: 'http://localhost:8080/students/'+$("#urno").val(), // url where to submit the request
+                contentType: "application/json",
+                type : "PUT", // type of action POST || GET
+                dataType : 'json', // data type
+                data: JSON.stringify(search),
+                 success : function(result) {
+                    // you can see the result from the console
+                	
+                },
+                error: function(xhr, resp, text) {
+                	
+                    console.log(xhr, resp, text);
+                }
+            })
+            loadDoc() ;
+        });
+        
+    });
+
+</script>
+<script>
+    $(document).ready(function(){
+        // click on button submit
+        $("#submit3").on('click', function(){
+        	
+        	
+        	    
+
+            // send ajax
+            $.ajax({
+                url: 'http://localhost:8080/students/'+$("#delete").val(), // url where to submit the request
+                contentType: "application/json",
+                type : "DELETE", // type of action POST || GET
+                dataType : 'json', // data type
+                success : function(result) {
+                    // you can see the result from the console
+                	
+                },
+                error: function(xhr, resp, text) {
+                	
+                    console.log(xhr, resp, text);
+                }
+            })
+            loadDoc() ;
+        });
+        
+    });
+
+</script>
+</body>
+</html>
+
